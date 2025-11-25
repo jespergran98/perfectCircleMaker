@@ -223,8 +223,16 @@ body.addEventListener('mousemove', (e) => {
       isDrawing = false;
       if (timerInterval) clearInterval(timerInterval);
       const currentScore = parseInt(percentage.textContent);
+
+    // Only save score when debug mode is OFF to avoid cheating
+    if (!debugToggle.checked) {
       saveScore(currentScore);
+    }
       percentage.textContent = 'Complete! ' + percentage.textContent;
+
+    if (debugToggle.checked) {
+        percentage.textContent += ' (debug: not saved to leaderboard)';
+      }
     } else {
       isDrawing = false;
       if (timerInterval) clearInterval(timerInterval);
