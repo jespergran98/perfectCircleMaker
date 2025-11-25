@@ -12,7 +12,7 @@ let circle = null; // Reference to the target circle element
 let userPath = null; // Container for the user's drawn path
 let percentage = null; // Display element showing accuracy percentage
 let hitboxCircle = null; // Starting point circle that user must return to
-let innerCircle = null; // Visual circle around dot showing the "perfect" zone
+let innerCircle = null; // Minimum distance circle - user can't start drawing inside this zone
 let timer = null; // Timer display element
 let timerInterval = null; // Interval reference for countdown timer
 let timeLeft = 7; // Remaining seconds on the timer
@@ -175,7 +175,7 @@ body.addEventListener('mousedown', (e) => {
   hitboxCircle.style.top = startY + 'px';
   body.appendChild(hitboxCircle);
   
-  // Create inner circle (visual guide around the dot)
+  // Create inner circle (minimum distance zone - can't start drawing here)
   innerCircle = document.createElement('div');
   innerCircle.className = 'inner-circle';
   if (debugToggle.checked) innerCircle.classList.add('debug-visible');
@@ -295,7 +295,7 @@ body.addEventListener('mousemove', (e) => {
     
     // Calculate average error and convert to percentage score
     const avgError = totalError / pathPoints.length;
-    const maxAllowedError = radius * 0.5; // Error threshold (50% of radius)
+    const maxAllowedError = radius * 0.3; // Error threshold (30% of radius)
     const accuracy = Math.max(0, 100 - (avgError / maxAllowedError) * 100);
     const roundedAccuracy = Math.round(accuracy);
     percentage.textContent = roundedAccuracy + '%';
