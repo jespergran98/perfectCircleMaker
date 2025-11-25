@@ -10,6 +10,9 @@ let userPath = null;
 let percentage = null;
 let hitboxCircle = null;
 let innerCircle = null;
+let timer = null;
+let timerInterval = null;
+let timeLeft = 7;
 let dotX, dotY;
 let isDrawing = false;
 let pathPoints = [];
@@ -27,12 +30,14 @@ debugToggle.addEventListener('change', () => {
     if (circle) circle.classList.add('debug-visible');
     if (hitboxCircle) hitboxCircle.classList.add('debug-visible');
     if (innerCircle) innerCircle.classList.add('debug-visible');
+    if (timer) timer.classList.add('debug-visible');
   } else {
     verticalLine.classList.remove('debug-visible');
     horizontalLine.classList.remove('debug-visible');
     if (circle) circle.classList.remove('debug-visible');
     if (hitboxCircle) hitboxCircle.classList.remove('debug-visible');
     if (innerCircle) innerCircle.classList.remove('debug-visible');
+    if (timer) timer.classList.remove('debug-visible');
   }
 });
 
@@ -55,6 +60,8 @@ body.addEventListener('mousedown', (e) => {
     if (percentage) percentage.remove();
     if (hitboxCircle) hitboxCircle.remove();
     if (innerCircle) innerCircle.remove();
+    if (timer) timer.remove();
+    if (timerInterval) clearInterval(timerInterval);
     
     // Show "too close to dot" message
     percentage = document.createElement('div');
@@ -73,6 +80,8 @@ body.addEventListener('mousedown', (e) => {
   if (percentage) percentage.remove();
   if (hitboxCircle) hitboxCircle.remove();
   if (innerCircle) innerCircle.remove();
+  if (timer) timer.remove();
+  if (timerInterval) clearInterval(timerInterval);
   
   pathPoints = [];
   startX = e.clientX;
@@ -82,6 +91,7 @@ body.addEventListener('mousedown', (e) => {
   hasBeenLeft = false;
   hasBeenAbove = false;
   hasBeenBelow = false;
+  timeLeft = 7;
   
   // Create target circle
   circle = document.createElement('div');
@@ -128,6 +138,28 @@ body.addEventListener('mousedown', (e) => {
   userPath.style.top = e.clientY + 'px';
   body.appendChild(userPath);
   
+  // Create timer
+  timer = document.createElement('div');
+  timer.className = 'timer';
+  if (debugToggle.checked) timer.classList.add('debug-visible');
+  timer.textContent = '7.0s';
+  timer.style.left = dotX + 'px';
+  timer.style.top = (dotY + radius + 20) + 'px';
+  body.appendChild(timer);
+  
+  // Start timer countdown
+  timerInterval = setInterval(() => {
+    timeLeft -= 0.1;
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      isDrawing = false;
+      percentage.textContent = 'Too slow!';
+      timer.textContent = '0.0s';
+    } else {
+      timer.textContent = timeLeft.toFixed(1) + 's';
+    }
+  }, 100);
+  
   isDrawing = true;
 });
 
@@ -163,6 +195,7 @@ body.addEventListener('mousemove', (e) => {
     // Check if all quadrants were visited
     if (hasBeenRight && hasBeenLeft && hasBeenAbove && hasBeenBelow) {
       isDrawing = false;
+      if (timerInterval) clearInterval(timerInterval);
       percentage.textContent = 'Complete! ' + percentage.textContent;
     }
     return;
