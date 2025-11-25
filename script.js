@@ -77,7 +77,8 @@ body.addEventListener('mousemove', (e) => {
     }
     
     const avgError = totalError / pathPoints.length;
-    const accuracy = Math.max(0, 100 - (avgError / radius) * 100);
+    const maxAllowedError = radius * 0.15;
+    const accuracy = Math.max(0, 100 - (avgError / maxAllowedError) * 100);
     percentage.textContent = Math.round(accuracy) + '%';
   }
 });
