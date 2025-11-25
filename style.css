@@ -57,3 +57,27 @@ body {
   pointer-events: none;
   z-index: 3;
 }
+
+.vertical-line {
+  position: fixed;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100vh;
+  background-color: red;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.horizontal-line {
+  position: fixed;
+  top: 50%;
+  left: 0;
+  width: 100vw;
+  height: 2px;
+  background-color: red;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 0;
+}

@@ -10,6 +10,10 @@ let isDrawing = false;
 let pathPoints = [];
 let startX, startY;
 let hasLeftHitbox = false;
+let hasBeenRight = false;
+let hasBeenLeft = false;
+let hasBeenAbove = false;
+let hasBeenBelow = false;
 
 body.addEventListener('mousedown', (e) => {
   // Get dot center position
@@ -49,6 +53,10 @@ body.addEventListener('mousedown', (e) => {
   startX = e.clientX;
   startY = e.clientY;
   hasLeftHitbox = false;
+  hasBeenRight = false;
+  hasBeenLeft = false;
+  hasBeenAbove = false;
+  hasBeenBelow = false;
   
   // Create target circle
   circle = document.createElement('div');
@@ -98,10 +106,19 @@ body.addEventListener('mousemove', (e) => {
     hasLeftHitbox = true;
   }
   
+  // Check quadrant tracking
+  if (e.clientX > dotX) hasBeenRight = true;
+  if (e.clientX < dotX) hasBeenLeft = true;
+  if (e.clientY < dotY) hasBeenAbove = true;
+  if (e.clientY > dotY) hasBeenBelow = true;
+  
   // Check if completed circle (returned to hitbox after leaving)
   if (hasLeftHitbox && distFromStart <= hitboxRadius) {
-    isDrawing = false;
-    percentage.textContent = 'Complete! ' + percentage.textContent;
+    // Check if all quadrants were visited
+    if (hasBeenRight && hasBeenLeft && hasBeenAbove && hasBeenBelow) {
+      isDrawing = false;
+      percentage.textContent = 'Complete! ' + percentage.textContent;
+    }
     return;
   }
   
