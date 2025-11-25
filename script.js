@@ -1,10 +1,15 @@
 const dot = document.querySelector('.dot');
 const body = document.body;
+const debugToggle = document.getElementById('debugToggle');
+const verticalLine = document.querySelector('.vertical-line');
+const horizontalLine = document.querySelector('.horizontal-line');
 
 let radius = 0;
 let circle = null;
 let userPath = null;
 let percentage = null;
+let hitboxCircle = null;
+let innerCircle = null;
 let dotX, dotY;
 let isDrawing = false;
 let pathPoints = [];
@@ -14,6 +19,22 @@ let hasBeenRight = false;
 let hasBeenLeft = false;
 let hasBeenAbove = false;
 let hasBeenBelow = false;
+
+debugToggle.addEventListener('change', () => {
+  if (debugToggle.checked) {
+    verticalLine.classList.add('debug-visible');
+    horizontalLine.classList.add('debug-visible');
+    if (circle) circle.classList.add('debug-visible');
+    if (hitboxCircle) hitboxCircle.classList.add('debug-visible');
+    if (innerCircle) innerCircle.classList.add('debug-visible');
+  } else {
+    verticalLine.classList.remove('debug-visible');
+    horizontalLine.classList.remove('debug-visible');
+    if (circle) circle.classList.remove('debug-visible');
+    if (hitboxCircle) hitboxCircle.classList.remove('debug-visible');
+    if (innerCircle) innerCircle.classList.remove('debug-visible');
+  }
+});
 
 body.addEventListener('mousedown', (e) => {
   // Get dot center position
@@ -32,6 +53,8 @@ body.addEventListener('mousedown', (e) => {
     if (circle) circle.remove();
     if (userPath) userPath.remove();
     if (percentage) percentage.remove();
+    if (hitboxCircle) hitboxCircle.remove();
+    if (innerCircle) innerCircle.remove();
     
     // Show "too close to dot" message
     percentage = document.createElement('div');
@@ -48,6 +71,8 @@ body.addEventListener('mousedown', (e) => {
   if (circle) circle.remove();
   if (userPath) userPath.remove();
   if (percentage) percentage.remove();
+  if (hitboxCircle) hitboxCircle.remove();
+  if (innerCircle) innerCircle.remove();
   
   pathPoints = [];
   startX = e.clientX;
@@ -61,11 +86,32 @@ body.addEventListener('mousedown', (e) => {
   // Create target circle
   circle = document.createElement('div');
   circle.className = 'circle';
+  if (debugToggle.checked) circle.classList.add('debug-visible');
   circle.style.width = radius * 2 + 'px';
   circle.style.height = radius * 2 + 'px';
   circle.style.left = dotX + 'px';
   circle.style.top = dotY + 'px';
   body.appendChild(circle);
+  
+  // Create hitbox circle
+  hitboxCircle = document.createElement('div');
+  hitboxCircle.className = 'hitbox-circle';
+  if (debugToggle.checked) hitboxCircle.classList.add('debug-visible');
+  hitboxCircle.style.width = '40px';
+  hitboxCircle.style.height = '40px';
+  hitboxCircle.style.left = startX + 'px';
+  hitboxCircle.style.top = startY + 'px';
+  body.appendChild(hitboxCircle);
+  
+  // Create inner circle
+  innerCircle = document.createElement('div');
+  innerCircle.className = 'inner-circle';
+  if (debugToggle.checked) innerCircle.classList.add('debug-visible');
+  innerCircle.style.width = '200px';
+  innerCircle.style.height = '200px';
+  innerCircle.style.left = dotX + 'px';
+  innerCircle.style.top = dotY + 'px';
+  body.appendChild(innerCircle);
   
   // Create percentage display
   percentage = document.createElement('div');
@@ -133,7 +179,7 @@ body.addEventListener('mousemove', (e) => {
     }
     
     const avgError = totalError / pathPoints.length;
-    const maxAllowedError = radius * 0.15;
+    const maxAllowedError = radius * 0.5;
     const accuracy = Math.max(0, 100 - (avgError / maxAllowedError) * 100);
     percentage.textContent = Math.round(accuracy) + '%';
   }
