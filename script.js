@@ -225,6 +225,10 @@ body.addEventListener('mousemove', (e) => {
       const currentScore = parseInt(percentage.textContent);
       saveScore(currentScore);
       percentage.textContent = 'Complete! ' + percentage.textContent;
+    } else {
+      isDrawing = false;
+      if (timerInterval) clearInterval(timerInterval);
+      percentage.textContent = 'Draw the circle around the dot!';
     }
     return;
   }
