@@ -14,6 +14,18 @@ Ting å inkludere:
 8. fargen på elementene endres basert på nøyaktighet under tegningen.
 9. En strategi for å detekte at brukeren har tegnet hele sirkelen, og ikke går tilbake til hitbox.
 
+Hva som ble inkludert:
+
+1. Et hvitt senterpunkt (dot) som brukeren tegner rundt
+2. Minimumsdistanse på 100px - viser "Too close to dot" hvis brukeren starter nærmere
+3. Radius beregnes automatisk fra klikk-punkt til senterpunktet
+4. 7-sekunders nedtellingstimer som starter ved første klikk
+5. Live nøyaktighetsprosent basert på avvik fra perfekt sirkel
+6. Quadrant-tracking som krever at brukeren besøker alle fire kvadranter (venstre, høyre, over, under)
+7. Top 10 leaderboard lagret i localStorage
+8. Dynamisk fargeskift på prosenttekst: grønn (100%) → gul (80%) → rød (60%)
+9. Hitbox-system: brukeren må forlate 30px startområde før retur for å fullføre, og må ha vært innom alle kvadranter.
+
 ---
 
 Oppgave: Lag din egen interaktive side! 🎨✨
