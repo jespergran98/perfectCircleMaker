@@ -23,7 +23,7 @@ body.addEventListener('mousedown', (e) => {
   radius = Math.sqrt(dx * dx + dy * dy);
   
   // Check if too close to dot
-  if (radius < 30) {
+  if (radius < 100) {
     // Remove old elements if exist
     if (circle) circle.remove();
     if (userPath) userPath.remove();
