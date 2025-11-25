@@ -295,7 +295,7 @@ body.addEventListener('mousemove', (e) => {
     
     // Calculate average error and convert to percentage score
     const avgError = totalError / pathPoints.length;
-    const maxAllowedError = radius * 0.3; // Error threshold (30% of radius)
+    const maxAllowedError = radius * 0.3; // Error threshold (50% of radius)
     const accuracy = Math.max(0, 100 - (avgError / maxAllowedError) * 100);
     const roundedAccuracy = Math.round(accuracy);
     percentage.textContent = roundedAccuracy + '%';
