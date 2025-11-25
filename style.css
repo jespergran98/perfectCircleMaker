@@ -46,3 +46,14 @@ body {
   border-radius: 50%;
   transform: translate(-50%, -50%);
 }
+
+.percentage {
+  position: fixed;
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 32px;
+  font-weight: bold;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 3;
+}
