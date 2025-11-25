@@ -20,6 +20,24 @@ body.addEventListener('mousedown', (e) => {
   const dy = e.clientY - dotY;
   radius = Math.sqrt(dx * dx + dy * dy);
   
+  // Check if too close to dot
+  if (radius < 100) {
+    // Remove old elements if exist
+    if (circle) circle.remove();
+    if (userPath) userPath.remove();
+    if (percentage) percentage.remove();
+    
+    // Show "too close to dot" message
+    percentage = document.createElement('div');
+    percentage.className = 'percentage';
+    percentage.textContent = 'Too close to dot';
+    percentage.style.left = dotX + 'px';
+    percentage.style.top = (dotY - 40) + 'px';
+    body.appendChild(percentage);
+    
+    return;
+  }
+  
   // Remove old elements if exist
   if (circle) circle.remove();
   if (userPath) userPath.remove();
