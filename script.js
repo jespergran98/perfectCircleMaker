@@ -94,7 +94,7 @@ body.addEventListener('mousedown', (e) => {
     percentage.className = 'percentage';
     percentage.textContent = 'Too close to dot';
     percentage.style.left = dotX + 'px';
-    percentage.style.top = (dotY - 40) + 'px';
+    percentage.style.top = (dotY - 80) + 'px';
     body.appendChild(percentage);
     
     return;
@@ -133,8 +133,8 @@ body.addEventListener('mousedown', (e) => {
   hitboxCircle = document.createElement('div');
   hitboxCircle.className = 'hitbox-circle';
   if (debugToggle.checked) hitboxCircle.classList.add('debug-visible');
-  hitboxCircle.style.width = '40px';
-  hitboxCircle.style.height = '40px';
+  hitboxCircle.style.width = '60px';
+  hitboxCircle.style.height = '60px';
   hitboxCircle.style.left = startX + 'px';
   hitboxCircle.style.top = startY + 'px';
   body.appendChild(hitboxCircle);
@@ -154,7 +154,7 @@ body.addEventListener('mousedown', (e) => {
   percentage.className = 'percentage';
   percentage.textContent = '100%';
   percentage.style.left = dotX + 'px';
-  percentage.style.top = (dotY - radius - 40) + 'px';
+  percentage.style.top = (dotY - radius - 80) + 'px';
   body.appendChild(percentage);
   
   // Create user drawing path
@@ -203,7 +203,7 @@ body.addEventListener('mousemove', (e) => {
   
   // Check distance from starting point
   const distFromStart = Math.sqrt((e.clientX - startX) ** 2 + (e.clientY - startY) ** 2);
-  const hitboxRadius = 20;
+  const hitboxRadius = 30;
   
   // Check if left hitbox
   if (distFromStart > hitboxRadius) {
