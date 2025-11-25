@@ -54,6 +54,32 @@ function updateLeaderboard() {
 // Initialize leaderboard on page load
 updateLeaderboard();
 
+// Helper function to update percentage color based on score
+function updatePercentageColor(element, score) {
+  let color;
+  
+  if (score >= 80) {
+    // Green to yellow fade (100% = pure green, 80% = pure yellow)
+    const ratio = (score - 80) / 20; // 0 at 80%, 1 at 100%
+    const red = Math.round(255 * (1 - ratio));
+    const green = 255;
+    const blue = 0;
+    color = `rgb(${red}, ${green}, ${blue})`;
+  } else if (score >= 60) {
+    // Yellow to red fade (80% = pure yellow, 60% = pure red)
+    const ratio = (score - 60) / 20; // 0 at 60%, 1 at 80%
+    const red = 255;
+    const green = Math.round(255 * ratio);
+    const blue = 0;
+    color = `rgb(${red}, ${green}, ${blue})`;
+  } else {
+    // Below 60% stays red
+    color = 'rgb(255, 0, 0)';
+  }
+  
+  element.style.color = color;
+}
+
 // Debug mode toggle - shows/hides helper elements
 debugToggle.addEventListener('change', () => {
   if (debugToggle.checked) {
@@ -163,6 +189,7 @@ body.addEventListener('mousedown', (e) => {
   percentage = document.createElement('div');
   percentage.className = 'percentage';
   percentage.textContent = '100%';
+  percentage.style.color = 'rgb(0, 255, 0)'; // Start at green (100%)
   percentage.style.left = dotX + 'px';
   percentage.style.top = (dotY - radius - 80) + 'px';
   body.appendChild(percentage);
@@ -270,7 +297,11 @@ body.addEventListener('mousemove', (e) => {
     const avgError = totalError / pathPoints.length;
     const maxAllowedError = radius * 0.5; // Error threshold (50% of radius)
     const accuracy = Math.max(0, 100 - (avgError / maxAllowedError) * 100);
-    percentage.textContent = Math.round(accuracy) + '%';
+    const roundedAccuracy = Math.round(accuracy);
+    percentage.textContent = roundedAccuracy + '%';
+    
+    // Update color based on accuracy: green (100%) -> yellow (80%) -> red (60%)
+    updatePercentageColor(percentage, roundedAccuracy);
   }
 });
 
