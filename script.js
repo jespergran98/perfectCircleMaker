@@ -8,6 +8,8 @@ let percentage = null;
 let dotX, dotY;
 let isDrawing = false;
 let pathPoints = [];
+let startX, startY;
+let hasLeftHitbox = false;
 
 body.addEventListener('mousedown', (e) => {
   // Get dot center position
@@ -21,7 +23,7 @@ body.addEventListener('mousedown', (e) => {
   radius = Math.sqrt(dx * dx + dy * dy);
   
   // Check if too close to dot
-  if (radius < 100) {
+  if (radius < 30) {
     // Remove old elements if exist
     if (circle) circle.remove();
     if (userPath) userPath.remove();
@@ -44,6 +46,9 @@ body.addEventListener('mousedown', (e) => {
   if (percentage) percentage.remove();
   
   pathPoints = [];
+  startX = e.clientX;
+  startY = e.clientY;
+  hasLeftHitbox = false;
   
   // Create target circle
   circle = document.createElement('div');
@@ -83,6 +88,22 @@ body.addEventListener('mousemove', (e) => {
   
   // Track point and calculate accuracy
   pathPoints.push({ x: e.clientX, y: e.clientY });
+  
+  // Check distance from starting point
+  const distFromStart = Math.sqrt((e.clientX - startX) ** 2 + (e.clientY - startY) ** 2);
+  const hitboxRadius = 20;
+  
+  // Check if left hitbox
+  if (distFromStart > hitboxRadius) {
+    hasLeftHitbox = true;
+  }
+  
+  // Check if completed circle (returned to hitbox after leaving)
+  if (hasLeftHitbox && distFromStart <= hitboxRadius) {
+    isDrawing = false;
+    percentage.textContent = 'Complete! ' + percentage.textContent;
+    return;
+  }
   
   if (pathPoints.length > 1) {
     let totalError = 0;
