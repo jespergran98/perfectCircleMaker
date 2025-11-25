@@ -3,6 +3,7 @@ const body = document.body;
 const debugToggle = document.getElementById('debugToggle');
 const verticalLine = document.querySelector('.vertical-line');
 const horizontalLine = document.querySelector('.horizontal-line');
+const leaderboardScores = document.getElementById('leaderboardScores');
 
 let radius = 0;
 let circle = null;
@@ -22,6 +23,31 @@ let hasBeenRight = false;
 let hasBeenLeft = false;
 let hasBeenAbove = false;
 let hasBeenBelow = false;
+
+// Leaderboard functions
+function loadScores() {
+  const saved = localStorage.getItem('circleScores');
+  return saved ? JSON.parse(saved) : [];
+}
+
+function saveScore(score) {
+  let scores = loadScores();
+  scores.push(score);
+  scores.sort((a, b) => b - a);
+  scores = scores.slice(0, 10);
+  localStorage.setItem('circleScores', JSON.stringify(scores));
+  updateLeaderboard();
+}
+
+function updateLeaderboard() {
+  const scores = loadScores();
+  leaderboardScores.innerHTML = scores.map((score, i) => 
+    `<div>${i + 1}. ${score}%</div>`
+  ).join('');
+}
+
+// Initialize leaderboard
+updateLeaderboard();
 
 debugToggle.addEventListener('change', () => {
   if (debugToggle.checked) {
@@ -196,6 +222,8 @@ body.addEventListener('mousemove', (e) => {
     if (hasBeenRight && hasBeenLeft && hasBeenAbove && hasBeenBelow) {
       isDrawing = false;
       if (timerInterval) clearInterval(timerInterval);
+      const currentScore = parseInt(percentage.textContent);
+      saveScore(currentScore);
       percentage.textContent = 'Complete! ' + percentage.textContent;
     }
     return;
